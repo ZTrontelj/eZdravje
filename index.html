@@ -61,7 +61,59 @@
 							<div class="panel-body">
 								<span class="label label-default">Ime</span><input id="kreirajIme" type="text" class="form-control input-mini" placeholder="Osama">
 								<span class="label label-default">Priimek</span><input id="kreirajPriimek" type="text" class="form-control" placeholder="Bin Laden">
-								<span class="label label-default">Datum rojstva</span><input id="kreirajDatumRojstva" type="text" class="form-control" placeholder="1957-03-10T09:08">
+								<span class="label label-default">Spol</span>
+					      <select class="form-control" id="kreirajSpol">
+					        <option value=""></option>
+					        <option>Moški</option>
+					        <option>Ženski</option>
+					      </select>
+					      
+					      <span class="label label-default">Telesna višina</span><input id="kreirajTelesnaVisina" type="text" class="form-control" placeholder="178">
+								
+								<span class="label label-default">Trenutna telesna teža</span><input id="kreirajTrenutnaTelesnaTeza" type="text" class="form-control" placeholder="70">
+								
+								<span class="label label-default">Kakšna je vaša trenutna fizična pripravljenost?</span>
+					      <select class="form-control" id="kreirajTrenutnaFizPrip">
+					        <option value=""></option>
+					        <option>Nisem fizično aktiven</option>
+					        <option>Občasna lažja fizična aktivnost</option>
+					        <option>Večkrat na teden sem fizično aktiven</option>
+					      </select>
+								
+								<span class="label label-default">Kakšni so vaši cilji glede teka?</span>
+					      <select class="form-control" id="kreirajCiljiTek">
+					        <option value=""></option>
+					        <option>Preteči 5km ni važno v kakšnem času - Nisem fizično aktiven</option>
+					        <option>Preteči 5km v času 30-35min (6:00-7:00/km) - Nisem fizično aktiven</option>
+					        <option>Preteči 5km v času 27:30-30min (5:30-6:00/km) - Občasna lažja fizična aktivnost</option>
+					        <option>Preteči 5km v času 25-27:30min (5:00-5:30/km) - Občasna lažja fizična aktivnost</option>
+					        <option>Preteči 5km v času 22:30-25min (4:30-5:00/km) - Večkrat na teden sem fizično aktiven</option>
+					        <option>Preteči 5km v času 20-22:30min (4:00-4:30/km) - Večkrat na teden sem fizično aktiven</option>
+					        <option>Preteči 5km v času pod 20min (pod 4:00/km) - Večkrat na teden sem fizično aktiven</option>
+					      </select>
+								
+								<span class="label label-default">Kakšni so vaši cilji glede telesne teže?</span>
+					      <select class="form-control" id="kreirajCiljiTeza">
+					        <option value=""></option>
+					        <option>Izgubiti 1kg na teden</option>
+					        <option>Izgubiti 0,5kg na teden</option>
+					        <option>Izgubiti 0,25kg na teden</option>
+					        <option>Vzdrževati trenutno težo</option>
+					        <option>Pridobiti 0,25kg na teden</option>
+					        <option>Pridobiti 0,5kg na teden</option>
+					        <option>Pridobiti 1kg na teden</option>
+					      </select>
+								
+								<span class="label label-default">Kolikokrat na teden ste pripravljeni trenirati za dosego željenih ciljev?</span>
+					      <select class="form-control" id="kreirajTreningiNaTeden">
+					        <option value=""></option>
+					        <option>1-2 krat</option>
+					        <option>3-4 krat</option>
+					        <option>5-6 krat</option>
+					        <option>7 in večkrat</option>
+					      </select>
+					      
+								<br>
 								<button type="button" class="btn btn-primary btn-xs" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span>
 						  	</div>
 						</div>
@@ -81,6 +133,9 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-6">
 						<div class="panel panel-default">
@@ -103,7 +158,7 @@
 								<span class="label label-default">Nasičenost krvi s kisikom</span><div class="input-group"><input id="dodajVitalnoNasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="98"><span class="input-group-addon">%</span></div>
 								<span class="label label-default">Merilec</span><input id="dodajVitalnoMerilec" type="text" class="form-control input-mini" placeholder="medicinska sestra Hrastova Micka">
 								<button type="button" class="btn btn-primary btn-xs" onclick="dodajMeritveVitalnihZnakov()">Dodaj meritve vitalnih znakov</button><span id="dodajMeritveVitalnihZnakovSporocilo"></span>
-						  	</div>
+						  </div>
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6">
@@ -117,7 +172,45 @@
 							</div>
 							<div class="panel-body">
 								<span class="label label-default">EHR ID</span><input id="meritveVitalnihZnakovEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-								<button type="button" class="btn btn-primary btn-xs" onclick="preberiMeritveVitalnihZnakov()">Preberi meritve vitalnih znakov</button><span id="preberiMeritveVitalnihZnakovSporocilo"></span>
+								<button type="button" class="btn btn-primary btn-xs" onclick="preberiCustom()">Preberi meritve vitalnih znakov</button><span id="preberiMeritveVitalnihZnakovSporocilo"></span>
+								<div id="rezultatMeritveVitalnihZnakov"></div>
+						  	</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-lg-8 col-md-8 col-sm-8"><b>Plan treninga</b></div>
+								</div>
+							</div>
+							<div class="panel-body">
+								<span class="label label-default">EHR ID</span><input id="dodajPodatkeEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+						  </div>
+						  <div class="panel-body">
+								<div id="izpisiPlanTreninga"></div>
+						  </div>
+							<button type="button" class="btn btn-primary btn-xs" onclick="vrniPlanTreninga()">Izpisi plan treninga</button><span id="dodajMeritveVitalnihZnakovSporocilo"></span>
+						  
+						  
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-sm-6"><b>Pregled</b> meritev <b>vitalnih znakov</b> bolnika</div>
+									<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiTipZaVitalneZnake"><option value="telesna temperatura">telesna temperatura</option><option value="telesna temperatura AQL">telesna temperatura (filter na podhladitev)</option><option value="telesna teža">telesna teža</option></select></div>
+									<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option></select></div>
+								</div>
+							</div>
+							<div class="panel-body">
+								<span class="label label-default">EHR ID</span><input id="meritveVitalnihZnakovEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+								<button type="button" class="btn btn-primary btn-xs" onclick="preberiCustom()">Preberi meritve vitalnih znakov</button><span id="preberiMeritveVitalnihZnakovSporocilo"></span>
 								<div id="rezultatMeritveVitalnihZnakov"></div>
 						  	</div>
 						</div>

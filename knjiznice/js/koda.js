@@ -41,6 +41,17 @@ function generirajPodatke(stPacienta) {
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 
+function vrniPlanTreninga() {
+	
+	
+	var parameter = 'ciljiTek';
+	preberiCustom(parameter);
+	
+	
+}
+
+
+
 /**
  * Kreiraj nov EHR zapis za pacienta in dodaj osnovne demografske podatke.
  * V primeru uspešne akcije izpiši sporočilo s pridobljenim EHR ID, sicer
@@ -51,10 +62,26 @@ function kreirajEHRzaBolnika() {
 
 	var ime = $("#kreirajIme").val();
 	var priimek = $("#kreirajPriimek").val();
-	var datumRojstva = $("#kreirajDatumRojstva").val();
-
-	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
-      priimek.trim().length == 0 || datumRojstva.trim().length == 0) {
+	var spol = $("#kreirajSpol").val();
+	var telesnaVisina = $("#kreirajTelesnaVisina").val();
+	var trenutnaTelesnaTeza = $("#kreirajTrenutnaTelesnaTeza").val();
+	var trenutnaFizPrip = $("#kreirajTrenutnaFizPrip").val();
+	var ciljiTek = $("#kreirajCiljiTek").val();
+	var ciljiTeza = $("#kreirajCiljiTeza").val();
+	var treningiNaTeden = $("#kreirajTreningiNaTeden").val();
+	
+	
+	if(spol == "Moški"){
+		spol = "MALE";
+	}else if(spol == "Ženski"){
+		spol = "FEMALE";
+	}else{
+		spol = "";
+	}
+	
+	
+	if (!ime || !priimek || ime.trim().length == 0 ||
+      priimek.trim().length == 0) {
 		$("#kreirajSporocilo").html("<span class='obvestilo label " +
       "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
 	} else {
@@ -66,11 +93,20 @@ function kreirajEHRzaBolnika() {
 		    type: 'POST',
 		    success: function (data) {
 		        var ehrId = data.ehrId;
+		        
 		        var partyData = {
 		            firstNames: ime,
 		            lastNames: priimek,
-		            dateOfBirth: datumRojstva,
-		            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+		            gender: spol,
+		            partyAdditionalInfo: [
+		            	{key: "ehrId", value: ehrId},
+		            	{key: "telesnaVisina", value: telesnaVisina},
+		            	{key: "trenutnaTelesnaTeza", value: trenutnaTelesnaTeza},
+		            	{key: "trenutnaFizPrip", value: trenutnaFizPrip},
+		            	{key: "ciljiTek", value: ciljiTek},
+		            	{key: "ciljiTeza", value: ciljiTeza},
+		            	{key: "treningiNaTeden", value: treningiNaTeden}
+		            ]
 		        };
 		        $.ajax({
 		            url: baseUrl + "/demographics/party",
@@ -117,7 +153,7 @@ function preberiEHRodBolnika() {
 	    	success: function (data) {
 				var party = data.party;
 				$("#preberiSporocilo").html("<span class='obvestilo label " +
-          "label-success fade-in'>Bolnik '" + party.firstNames + " " +
+          "label-success fade-in'>Bolnik '" + party.firstNames + " " + party.gender + " " +
           party.lastNames + "', ki se je rodil '" + party.dateOfBirth +
           "'.</span>");
 			},
@@ -128,6 +164,74 @@ function preberiEHRodBolnika() {
 			}
 		});
 	}
+}
+
+
+function preberiCustom(parameter) {
+	var sessionId = getSessionId();
+	$.ajaxSetup({
+    headers: {"Ehr-Session": sessionId}
+	});
+	var ehr = $("#dodajPodatkeEHR").val();
+	var searchData = [
+	    {key: "ehrId", value: ehr}
+	];
+	$.ajax({
+	    url: baseUrl + "/demographics/party/query",
+	    type: 'POST',
+	    contentType: 'application/json',
+	    data: JSON.stringify(searchData),
+	    success: function (res) {
+	        for (i in res.parties) {
+	            var party = res.parties[i];
+	            var podatkiVrni;
+	            for (j in party.partyAdditionalInfo) {
+	                if (party.partyAdditionalInfo[j].key === parameter) {
+	                    podatkiVrni = party.partyAdditionalInfo[j].value;
+	                    break;
+	                }
+	            }
+	            $("#izpisiPlanTreninga").append(
+	            	'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Plan treninga je sestavljen za uporabnika: '+party.firstNames + ' ' + party.lastNames + ', katerega cilj je: ' + podatkiVrni + '. <br></b>Treningi so sestavljeni, glede na vašo fizično pripravljenost in naj vam služijo kot vodilo pri dosegu vašega zastavljenega cilja. Podatke o tem koliko minut ste bili aktivni posamezni dan, kakšen je bil vaš povprečen srčni utrip in vaša telena teža vnašate v obrazec za vnašanje sprotnih meritev.</div></div></div></div>');
+	            
+	            	
+				if(podatkiVrni == "Preteči 5km ni važno v kakšnem času - Nisem fizično aktiven"){
+					var zapst = 1;
+					for(j in treningi1){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi1[j]+'</div></div></div>');
+						zapst++;
+					}
+					
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času 30-35min (6:00-7:00/km) - Nisem fizično aktiven"){
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času 27:30-30min (5:30-6:00/km) - Občasna lažja fizična aktivnost"){
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času 25-27:30min (5:00-5:30/km) - Občasna lažja fizična aktivnost"){
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času 22:30-25min (4:30-5:00/km) - Večkrat na teden sem fizično aktiven"){
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času 20-22:30min (4:00-4:30/km) - Večkrat na teden sem fizično aktiven"){
+					
+					
+				}else if(podatkiVrni == "Preteči 5km v času pod 20min (pod 4:00/km) - Večkrat na teden sem fizično aktiven"){
+					
+					
+				}
+	  
+	        }
+	
+	    }
+	   
+	});
+	
+
 }
 
 
@@ -391,3 +495,27 @@ $(document).ready(function() {
 	});
 
 });
+
+
+var treningi1 = [
+	"Za ogrevanje 5 minut hitre hoje. Nato izmenično 60 sekund teci in 90 sekund hodi, skupaj za 20 minut. Vaje za moč in gibljivost (20 do 30 minut)", 
+	"Za ogrevanje 5 minut hitre hoje. Nato izmenično 90 sekund teci in 2 minuti hodi. Skupaj za 20 minut. Vaje za moč in gibljivost (20 do 30 minut)", 
+	"Za ogrevanje 5 minut hitre hoje, nato 2 ponovitvi sledeče vadbe: Tek 200 metrov (ali 90 sekund), Hoja 200 metrov (ali 90 sekund), Tek 400 metrov (ali 3 minute), Hoja 400 metrov (ali 3 minute). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje. Nato: Tek 800 metrov (ali 5 minut), Tek 800 metrov (ali 5 minut), Hoja 400 metrov (ali 3 minute), Tek 800 metrov (ali 5 minut). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje, nato : Tek 1,2 kilometra (ali 8 minut), Hoja 800 metrov (ali 5 minut), Tek 1,2 kilometra (ali 8 minut). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje, nato teci 3,2 kilometra (ali 20 minut) brez hoje. Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje, nato teci 3,6 kilometra (ali 25 minutes) brez hoje. Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje, nato teci 4 kilometre (ali 25 minut). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje. Nato tecite 4,5 kilometra (ali 28 minut). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Za ogrevanje 5 minut hitre hoje, nato teci 5 kilometrov (ali 30 minut). Vaje za moč in gibljivost (20 do 30 minut)"
+	];
+	
+var treningi2 = [
+	"Lahkoten tek (2 km; 6:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Lahkoten tek (3 km; 6:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Tempo tek (skupaj 4 km) - ogrevanje 1km- 3 km tempo tek (5:35 min/km)- iztek.  Vaje za moč in gibljivost (20 do 30 minut)",
+	"Dolgi tek (6 km; 6:30). Raztezne vaje",
+	"Intervalni trening (skupaj 5 km)- ogrevanje- 3 x 800m (čas 4:02; odmor 400m lahkotnega teka) - iztek",
+	"Lahkoten tek (5 km; 6:30 min/km). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Intervalni trening (skupaj 10 km)- ogrevanje- 5 x 800m (čas 3:57; odmor 400m lahkotnega teka) - iztek"
+	];

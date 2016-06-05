@@ -5,6 +5,8 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
+var zemljevidIzrisan = false;
+
 
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
@@ -63,9 +65,6 @@ function kreirajEHRzaBolnika() {
 	var ime = $("#kreirajIme").val();
 	var priimek = $("#kreirajPriimek").val();
 	var spol = $("#kreirajSpol").val();
-	var telesnaVisina = $("#kreirajTelesnaVisina").val();
-	var trenutnaTelesnaTeza = $("#kreirajTrenutnaTelesnaTeza").val();
-	var trenutnaFizPrip = $("#kreirajTrenutnaFizPrip").val();
 	var ciljiTek = $("#kreirajCiljiTek").val();
 	var ciljiTeza = $("#kreirajCiljiTeza").val();
 	var treningiNaTeden = $("#kreirajTreningiNaTeden").val();
@@ -100,9 +99,6 @@ function kreirajEHRzaBolnika() {
 		            gender: spol,
 		            partyAdditionalInfo: [
 		            	{key: "ehrId", value: ehrId},
-		            	{key: "telesnaVisina", value: telesnaVisina},
-		            	{key: "trenutnaTelesnaTeza", value: trenutnaTelesnaTeza},
-		            	{key: "trenutnaFizPrip", value: trenutnaFizPrip},
 		            	{key: "ciljiTek", value: ciljiTek},
 		            	{key: "ciljiTeza", value: ciljiTeza},
 		            	{key: "treningiNaTeden", value: treningiNaTeden}
@@ -172,7 +168,7 @@ function preberiCustom(parameter) {
 	$.ajaxSetup({
     headers: {"Ehr-Session": sessionId}
 	});
-	var ehr = $("#dodajPodatkeEHR").val();
+	var ehr = $("#dodajPodatkeEHRplanTreninga").val();
 	var searchData = [
 	    {key: "ehrId", value: ehr}
 	];
@@ -192,7 +188,7 @@ function preberiCustom(parameter) {
 	                }
 	            }
 	            $("#izpisiPlanTreninga").append(
-	            	'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Plan treninga je sestavljen za uporabnika: '+party.firstNames + ' ' + party.lastNames + ', katerega cilj je: ' + podatkiVrni + '. <br></b>Treningi so sestavljeni, glede na vašo fizično pripravljenost in naj vam služijo kot vodilo pri dosegu vašega zastavljenega cilja. Podatke o tem koliko minut ste bili aktivni posamezni dan, kakšen je bil vaš povprečen srčni utrip in vaša telena teža vnašate v obrazec za vnašanje sprotnih meritev.</div></div></div></div>');
+	            	'<div class="panel panel-default"><div class="panel-heading"><div class="row"><b>Plan treninga je sestavljen za uporabnika: '+party.firstNames + ' ' + party.lastNames + ', katerega cilj je: ' + podatkiVrni + '. <br></b>Treningi so sestavljeni, glede na vašo fizično pripravljenost in naj vam služijo kot vodilo pri dosegu vašega zastavljenega cilja. Podatke o tem koliko minut ste bili aktivni posamezni dan, kakšen je bil vaš povprečen srčni utrip in vaša telena teža vnašate v obrazec za vnašanje sprotnih meritev.</div></div></div>');
 	            
 	            	
 				if(podatkiVrni == "Preteči 5km ni važno v kakšnem času - Nisem fizično aktiven"){
@@ -248,7 +244,7 @@ function dodajMeritveVitalnihZnakov() {
 	var datumInUra = $("#dodajVitalnoDatumInUra").val();
 	var telesnaVisina = $("#dodajVitalnoTelesnaVisina").val();
 	var telesnaTeza = $("#dodajVitalnoTelesnaTeza").val();
-	var telesnaTemperatura = $("#dodajVitalnoTelesnaTemperatura").val();
+	var telesnaTemperatura = $("#dodajVitalnoMinuteAktivnosti").val();
 	var sistolicniKrvniTlak = $("#dodajVitalnoKrvniTlakSistolicni").val();
 	var diastolicniKrvniTlak = $("#dodajVitalnoKrvniTlakDiastolicni").val();
 	var nasicenostKrviSKisikom = $("#dodajVitalnoNasicenostKrviSKisikom").val();
@@ -324,7 +320,7 @@ function preberiMeritveVitalnihZnakov() {
 	    	success: function (data) {
 				var party = data.party;
 				$("#rezultatMeritveVitalnihZnakov").html("<br/><span>Pridobivanje " +
-          "podatkov za <b>'" + tip + "'</b> bolnika <b>'" + party.firstNames +
+          "podatkov za <b>'" + ehrId + "'</b> osebo: <b>'" + party.firstNames +
           " " + party.lastNames + "'</b>.</span><br/><br/>");
 				if (tip == "telesna temperatura") {
 					$.ajax({
@@ -335,11 +331,11 @@ function preberiMeritveVitalnihZnakov() {
 					    	if (res.length > 0) {
 						    	var results = "<table class='table table-striped " +
                     "table-hover'><tr><th>Datum in ura</th>" +
-                    "<th class='text-right'>Telesna temperatura</th></tr>";
+                    "<th class='text-right'>Količina telesne aktivnosti</th></tr>";
 						        for (var i in res) {
 						            results += "<tr><td>" + res[i].time +
                           "</td><td class='text-right'>" + res[i].temperature +
-                          " " + res[i].unit + "</td>";
+                          " minut </td>";
 						        }
 						        results += "</table>";
 						        $("#rezultatMeritveVitalnihZnakov").append(results);
@@ -495,6 +491,157 @@ $(document).ready(function() {
 	});
 
 });
+
+function izpisiChartAktivnost(){
+	sessionId = getSessionId();
+
+	var ehrId = $("#meritveVitalnihZnakovEHRid").val();
+	var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	
+	$.ajax({
+	    url: baseUrl + "/view/" + ehrId + "/body_temperature",
+	    type: 'GET',
+	    headers: {
+	        "Ehr-Session": sessionId
+	    },
+	    success: function (res) {
+	
+	        res.forEach(function(el, i, arr) {
+	            var date = new Date(el.time);
+	            el.date = date.getDate() + '-' + monthNames[date.getMonth()];
+	        });
+	
+	        new Morris.Bar({
+	            element: 'grafFieldTElesnaAktivnost',
+	            data: res.reverse(),
+	            xkey: 'date',
+	            ykeys: ['temperature'],
+	            labels: ['Minute telesne aktivnosti'],
+	            hideHover: true,
+	            barColors: ['#FFCE54'],
+	            xLabelMargin: 5,
+	            resize: true
+	        });
+	
+	    }
+	});
+
+	
+}
+
+function izpisiChartTelesnaTeza() {
+	sessionId = getSessionId();
+	
+	var ehrId = $("#meritveVitalnihZnakovEHRid").val();
+	var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	$.ajax({
+    url: baseUrl + "/view/" + ehrId + "/weight",
+    type: 'GET',
+    headers: {
+        "Ehr-Session": sessionId
+    },
+    success: function (res) {
+
+        res.forEach(function (el, i, arr) {
+            var date = new Date(el.time);
+            el.date = date.getTime();
+        });
+
+        new Morris.Area({
+            element: 'grafFieldTelesnaTeza',
+            data: res.reverse(),
+            xkey: 'date',
+            ykeys: ['weight'],
+            lineColors: ['#4FC1E9'],
+            labels: ['Weight'],
+            lineWidth: 2,
+            pointSize: 3,
+            hideHover: true,
+            behaveLikeLine: true,
+            smooth: false,
+            resize: true,
+            xLabels: "day",
+            xLabelFormat: function (x){
+                var date = new Date(x);
+                return (date.getDate() + '-' + monthNames[date.getMonth()]);
+            },
+            
+        });
+
+    }
+});
+
+}
+
+function prikaziZemljevid() {
+		
+	if (zemljevidIzrisan) {
+		return;
+	}
+	var iskanje = "Shopping centre";
+
+	function initMap() {
+	  var location = {lat: 46.051652, lng: 14.469885};
+	  
+	  var map = new google.maps.Map(document.getElementById('map'), {
+	    center: location,
+	    zoom: 12
+	  });
+	
+	  var infoWindow = new google.maps.InfoWindow();
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(function(position) {
+	      var pos = {
+	        lat: position.coords.latitude,
+	        lng: position.coords.longitude
+	      };
+	      location = pos;
+	      infoWindow.setPosition(pos);
+	      map.setCenter(pos);
+	    }, function() {
+	      handleLocationError(true, infoWindow, map.getCenter());
+	    });
+	  } else {
+	    // Browser doesn't support Geolocation
+	    handleLocationError(false, infoWindow, map.getCenter());
+	  }
+	  
+	  if (iskanje != 0 ) {
+		  var service = new google.maps.places.PlacesService(map);
+		  service.nearbySearch({
+		    location: location,
+		    radius: 70000,
+		    type: [iskanje]
+		  }, callback);
+	  }
+		function callback(results, status) {
+		  if (status === google.maps.places.PlacesServiceStatus.OK) {
+		    for (var i = 0; i < results.length; i++) {
+		    	service.getDetails(results[i], callback2);
+		    }
+		  }
+		}
+		function callback2(place, status) {
+		  if (status === google.maps.places.PlacesServiceStatus.OK) {
+		    var marker = new google.maps.Marker({
+	      map: map,
+	      position: place.geometry.location
+	      });
+	      
+	      google.maps.event.addListener(marker, 'click', function() {
+	        infoWindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+	          place.formatted_address +  "<br> <a href=\"" + place.url + "\">Povezava do Google Maps</a>" +
+	          "<br> <a href=\"http://www.maps.google.com?daddr=" + place.name + "\">Navodila za pot</a>" +
+	          '</div>');
+	        infoWindow.open(map, this);
+	      });
+		  }
+		}
+	}
+	$("#map").height(460);
+	initMap();
+	zemljevidIzrisan = true;
+}
 
 
 var treningi1 = [

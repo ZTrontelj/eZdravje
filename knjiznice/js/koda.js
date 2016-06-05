@@ -32,12 +32,32 @@ function getSessionId() {
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
-function generirajPodatke(stPacienta) {
-  ehrId = "";
+function generirajPodatke1() {
+	ehrId = "2abb5a05-5378-4621-ac26-125bcba81d0f";
+	
+	$("#dodajVitalnoEHR").val(ehrId);
+	$("#dodajPodatkeEHRplanTreninga").val(ehrId);
+	$("#meritveVitalnihZnakovEHRid").val(ehrId);
+	
+  
+}
+function generirajPodatke2() {
+	ehrId = "a9dcbbf1-4402-461f-862c-9d1b92365246";
+	
+	$("#dodajVitalnoEHR").val(ehrId);
+	$("#dodajPodatkeEHRplanTreninga").val(ehrId);
+	$("#meritveVitalnihZnakovEHRid").val(ehrId);
 
-  // TODO: Potrebno implementirati
+  
+}
+function generirajPodatke3() {
+	ehrId = "3c9e4bc9-77b2-47c7-952a-2bc1b779507d";
+	
+	$("#dodajVitalnoEHR").val(ehrId);
+	$("#dodajPodatkeEHRplanTreninga").val(ehrId);
+	$("#meritveVitalnihZnakovEHRid").val(ehrId);
 
-  return ehrId;
+  
 }
 
 
@@ -202,22 +222,52 @@ function preberiCustom(parameter) {
 					
 					
 				}else if(podatkiVrni == "Preteči 5km v času 30-35min (6:00-7:00/km) - Nisem fizično aktiven"){
-					
+					var zapst = 1;
+					for(j in treningi1){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi1[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}else if(podatkiVrni == "Preteči 5km v času 27:30-30min (5:30-6:00/km) - Občasna lažja fizična aktivnost"){
-					
+					var zapst = 1;
+					for(j in treningi2){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi2[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}else if(podatkiVrni == "Preteči 5km v času 25-27:30min (5:00-5:30/km) - Občasna lažja fizična aktivnost"){
-					
+					var zapst = 1;
+					for(j in treningi2){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi2[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}else if(podatkiVrni == "Preteči 5km v času 22:30-25min (4:30-5:00/km) - Večkrat na teden sem fizično aktiven"){
-					
+					var zapst = 1;
+					for(j in treningi3){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi3[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}else if(podatkiVrni == "Preteči 5km v času 20-22:30min (4:00-4:30/km) - Večkrat na teden sem fizično aktiven"){
-					
+					var zapst = 1;
+					for(j in treningi3){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi3[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}else if(podatkiVrni == "Preteči 5km v času pod 20min (pod 4:00/km) - Večkrat na teden sem fizično aktiven"){
-					
+					var zapst = 1;
+					for(j in treningi3){
+						$("#izpisiPlanTreninga").append(
+							'<div class="panel panel-default"><div class="panel-heading"><div class="row"><div class="col-lg-6 col-md-6 col-sm-6"><b>Trening</b>: '+zapst+'</div></div></div><div class="panel-body"><div>'+treningi3[j]+'</div></div></div>');
+						zapst++;
+					}
 					
 				}
 	  
@@ -665,4 +715,24 @@ var treningi2 = [
 	"Intervalni trening (skupaj 5 km)- ogrevanje- 3 x 800m (čas 4:02; odmor 400m lahkotnega teka) - iztek",
 	"Lahkoten tek (5 km; 6:30 min/km). Vaje za moč in gibljivost (20 do 30 minut)",
 	"Intervalni trening (skupaj 10 km)- ogrevanje- 5 x 800m (čas 3:57; odmor 400m lahkotnega teka) - iztek"
+	];
+	
+var treningi3 = [
+	"Lahkoten tek (2 km; 5:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Lahkoten tek (3 km; 5:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Tempo tek (skupaj 4 km) - ogrevanje 1km- 3 km tempo tek (4:35 min/km)- iztek.  Vaje za moč in gibljivost (20 do 30 minut)",
+	"Dolgi tek (6 km; 6:30). Raztezne vaje",
+	"Intervalni trening (skupaj 5 km)- ogrevanje- 3 x 800m (čas 3:30; odmor 400m lahkotnega teka) - iztek",
+	"Lahkoten tek (5 km; 5:30 min/km). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Intervalni trening (skupaj 10 km)- ogrevanje- 5 x 800m (čas 3:30; odmor 400m lahkotnega teka) - iztek"
+	];
+	
+var treningi3 = [
+	"Lahkoten tek (2 km; 4:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Lahkoten tek (3 km; 4:30 min/km), Vaje za moč in gibljivost (20 do 30 minut)",
+	"Tempo tek (skupaj 4 km) - ogrevanje 1km- 3 km tempo tek (3:40 min/km)- iztek.  Vaje za moč in gibljivost (20 do 30 minut)",
+	"Dolgi tek (6 km; 6:30). Raztezne vaje",
+	"Intervalni trening (skupaj 5 km)- ogrevanje- 3 x 800m (čas 3:00; odmor 400m lahkotnega teka) - iztek",
+	"Lahkoten tek (5 km; 5:30 min/km). Vaje za moč in gibljivost (20 do 30 minut)",
+	"Intervalni trening (skupaj 10 km)- ogrevanje- 5 x 800m (čas 3:10; odmor 400m lahkotnega teka) - iztek"
 	];

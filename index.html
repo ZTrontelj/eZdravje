@@ -26,22 +26,16 @@
           <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
         <!-- ZAČETEK: Ime vaše aplikacije -->
-        <a class="navbar-brand" href="index.html">{ime vaše aplikacije}</a>
+        <a class="navbar-brand" href="index.html">C25K</a>
         <!-- KONEC: Ime vaše aplikacije -->
       </div>
       <div class="collapse navbar-collapse" id="menujska-vrstica">
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li><div class="dropdown">
-  						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Generiranje podatkov
- 						  <span class="caret"></span></button>
-  						<ul class="dropdown-menu">
-					    <li><a href="#">Pacient 1</a></li>
-					    <li><a href="#">Pacient 2</a></li>
-					    <li><a href="#">Pacient 3</a></li>
-  					</ul>
-					</div></li>
+          <button type="button" class="btn btn-primary btn-xs" onclick="generirajPodatke1()">Generiraj podatke 1</button>
+          <button type="button" class="btn btn-primary btn-xs" onclick="generirajPodatke2()">Generiraj podatke 2</button>
+          <button type="button" class="btn btn-primary btn-xs" onclick="generirajPodatke3()">Generiraj podatke 3</button>
         </ul>
       </div>
     </div>

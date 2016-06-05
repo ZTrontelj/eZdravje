@@ -22,7 +22,7 @@
           <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
         <!-- ZAČETEK: Ime vaše aplikacije -->
-        <a class="navbar-brand" href="index.html">{ime vaše aplikacije}</a>
+        <a class="navbar-brand" href="index.html">C25K</a>
         <!-- KONEC: Ime vaše aplikacije -->
       </div>
       <div class="collapse navbar-collapse" id="menujska-vrstica">
@@ -45,7 +45,9 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Opis ideje, ki jo aplikacija podpira -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno dodati <strong>osnovni opis ideje rešitve</strong> (kakšen je osnovni SCENARIJ UPORABE, KDO je ciljna publika, za kakšen NAMEN se aplikacija uporablja).</p><p class="text-muted">Opis naj ne bo daljši od 200 besed.</p>
+            <p>
+              C25K - Couch to 5km je aplikacija, ki nam glede na našo trenutno fizično pripravljenost priporoči treninge, s pomočjo katerih bomo lahko pretekli 5km. Nasledna funkcija aplikacije je ta, da vanjo vnašamo koliko minut smo bili telesno aktivni in kakšna je naša telesna teža vsak dan. Kasneje lahko iz grafa razberemo napredek. Zadnja stvar, ki jo podpira pa je zemljevid sportnih trgovin v nasi blizini, saj tudi za tek potrebujemo ustrezno opremo.
+            </p>
             <!-- KONEC: Opis ideje, ki jo aplikacija podpira -->
           </div>
         </div>
@@ -55,7 +57,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je navesti zunanji vir podatkov (URL naslov), na kakšen način ste ga uporabili (neposredni API klic, uvožena statična datoteka ipd.) in kaj je bil namen uporabe (kako se vključuje v osnovno idejo aplikacije).</p>
+            Kot zunanji vir podatkov sem uporabil Google Maps API, bolj natančno preko Places API sem s klicem pridobimo podatke o želenm iskalnem nizu, v mojem primeru "športna trgovina". Pri tem se locira uporabnika in prikažem storitve, ki so v njegovi neposredni bližini. 
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>
@@ -65,7 +67,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Master/detail načrtovalski vzorec -->
-            <p><strong>TO-DO</strong>: Na tem mestu morate navesti uporabljen master/detail načrtovalski vzorec in na kakšen način ga nameravate uporabiti.</p>
+            Za master-detail sem uporabil Google Maps API - saj lahko na želeno lokacijo kliknemo in prikažejo se nam navodila za pot, lahko pa tudi odpremo nov zavihek in o izbranilokaciji izvemo več prek google maps spletne aplikacije, ki pa omogoča še številne druge funkcinalnosti.
             <!-- KONEC: Master/detail načrtovalski vzorec -->
           </div>
         </div>
@@ -75,7 +77,7 @@
           </div>
           <div class="panel-body">
             <!-- ZAČETEK: Uporabljeni zunanji viri podatkov -->
-            <p><strong>TO-DO</strong>: Na tem mestu je potrebno navesti uporabljeno tehniko vizualizacije podatkov (za pomoč lahko uporabite primer iz <a href="https://github.com/mbostock/d3/wiki/Gallery" target="_blank">D3.js galerije</a>) in zakaj je bila ta tehnika izbrana.</p>
+            Za tehniko vizualizacije sem uporabil navaden stolpični graf iz Morris.js knjižnice. Ta prikaže koliko časa smo bili aktivni vsak dan.
             <!-- KONEC: Uporabljeni zunanji viri podatkov -->
           </div>
         </div>

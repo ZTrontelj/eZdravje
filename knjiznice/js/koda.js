@@ -628,7 +628,7 @@ function prikaziZemljevid() {
 	if (zemljevidIzrisan) {
 		return;
 	}
-	var iskanje = "Shopping centre";
+	var iskanje = "sportna trgovina";
 
 	function initMap() {
 	  var location = {lat: 46.051652, lng: 14.469885};
